@@ -33,9 +33,11 @@ float** create_tableau(){
     if (tableau != NULL){
         tableau[0]=malloc(2* sizeof(float));
         tableau[1]=malloc(2* sizeof(float));
-        for (int i=0 ; i<2 ; i++){
-            tableau[0][i]=0;
-            tableau[1][i]=0;
+        if (tableau[0] != NULL && tableau[1] != NULL) {
+            for (int i = 0; i < 2; i++) {
+                tableau[0][i] = 0;
+                tableau[1][i] = 0;
+            }
         }
     }else{
         printf("le tableau n'a pas pu être crée");
