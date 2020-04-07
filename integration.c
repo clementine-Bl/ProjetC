@@ -19,4 +19,7 @@ void integrationTest(char* filename){
         signal=IIR(signal,tab_IIR);
 
     }
+    finFichier(fichier);
+    supprime_tableau_FIR(tab_FIR);
+    supprime_tableau_IIR(tab_IIR);
 }

@@ -109,3 +109,8 @@ absorp FIR(absorp valueAbsorp,int *cpt, float** tableau){
     return newAbsorp;
 }
 
+void supprime_tableau_FIR(float** tableau){
+    free(tableau[0]);
+    free(tableau[1]);
+    free(tableau);
+}

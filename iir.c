@@ -45,3 +45,9 @@ float** create_tableau_IIR(){
     }
     return tableau;
 }
+
+void supprime_tableau_IIR(float** tableau){
+    free(tableau[0]);
+    free(tableau[1]);
+    free(tableau);
+}
