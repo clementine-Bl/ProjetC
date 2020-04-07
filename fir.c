@@ -10,7 +10,7 @@ absorp firTest(char* filename){
 	int etat =0;
 	newAbsorp = lireFichier(record1,&etat);
 	while(etat != EOF){
-        myAbsorp = fir(newAbsorp,&cpt,parametre_FIR);
+        myAbsorp = FIR(newAbsorp,&cpt,parametre_FIR);
         newAbsorp = lireFichier(record1,&etat);
 	}
 	finFichier(record1);
