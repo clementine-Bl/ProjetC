@@ -6,7 +6,7 @@ absorp iirTest(char* filename){
     int etat=0;
     FILE* fichier=initFichier(filename);
     myAbsorp=lireFichier(fichier,&etat);
-    float** parametre_IIR=create_tableau();
+    float** parametre_IIR=create_tableau_IIR();
     do{
         new=IIR(myAbsorp, parametre_IIR);
         myAbsorp=lireFichier(fichier,&etat);
@@ -27,7 +27,7 @@ absorp IIR (absorp my, float ** tableau){
     return my;
 }
 
-float** create_tableau(){
+float** create_tableau_IIR(){
     float** tableau;
     int i;
     tableau=malloc(2* sizeof(float*));

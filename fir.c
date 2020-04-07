@@ -2,8 +2,7 @@
 #include "fichiers.h"
 
 absorp firTest(char* filename){
-    float* tab_Ac_Cap_R = createtab();
-    float* tab_Ac_Cap_IR = createtab();
+    float** parametre_FIR=create_tableau_FIR();
     int cpt=0;
 	absorp	myAbsorp;
 	absorp newAbsorp;
@@ -11,7 +10,7 @@ absorp firTest(char* filename){
 	int etat =0;
 	newAbsorp = lireFichier(record1,&etat);
 	while(etat != EOF){
-        myAbsorp = fir(newAbsorp,&cpt,tab_Ac_Cap_R,tab_Ac_Cap_IR);
+        myAbsorp = fir(newAbsorp,&cpt,parametre_FIR);
         newAbsorp = lireFichier(record1,&etat);
 	}
 	finFichier(record1);
@@ -20,16 +19,19 @@ absorp firTest(char* filename){
 
 }
 
-float* createtab(){
-    float* tableau;
-    tableau = malloc(50*sizeof(float));
+float** create_tableau_FIR(){    //tableau a 2 lignes : premiere ligne contient les ACR  et  la deuxieme contient les ACIR
+    float** tableau;
+    tableau = malloc(2*sizeof(float*));
     if(tableau == NULL ){
         printf("Le tableau n'a pas pu être créé");
+    }else{
+        tableau[0]=malloc(50* sizeof(float));
+        tableau[1]=malloc(50* sizeof(float));
     }
     return tableau;
 }
 
-absorp fir(absorp valueAbsorp,int *cpt, float* tab_Ac_Cap_R, float* tab_Ac_Cap_IR){
+absorp FIR(absorp valueAbsorp,int *cpt, float** tableau){
     absorp newAbsorp;
     float FIR_TAPS[51]={
             1.4774946e-019,
@@ -94,12 +96,12 @@ absorp fir(absorp valueAbsorp,int *cpt, float* tab_Ac_Cap_R, float* tab_Ac_Cap_I
         hcpt = *cpt;
     }
     for (i=0;i<hcpt;i++){
-        sommeAC_R += FIR_TAPS[i+1] * (tab_Ac_Cap_R[(*cpt-i) % 50]);
-        sommeAC_IR += FIR_TAPS[i+1] * (tab_Ac_Cap_IR[(*cpt-i) % 50]);
+        sommeAC_R += FIR_TAPS[i+1] * (tableau[0][(*cpt-i) % 50]);
+        sommeAC_IR += FIR_TAPS[i+1] * (tableau[1][(*cpt-i) % 50]);
     }
     *cpt = *cpt + 1;
-    tab_Ac_Cap_R[*cpt % 50] = valueAbsorp.acr;
-    tab_Ac_Cap_IR[*cpt % 50] = valueAbsorp.acir;
+    tableau[0][*cpt % 50] = valueAbsorp.acr;
+    tableau[1][*cpt % 50] = valueAbsorp.acir;
     newAbsorp.acr= sommeAC_R;
     newAbsorp.acir =sommeAC_IR;
     newAbsorp.dcir =valueAbsorp.dcir;

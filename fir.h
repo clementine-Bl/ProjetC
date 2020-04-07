@@ -1,5 +1,5 @@
 #include "define.h"
 
 absorp firTest(char* filename);
-absorp fir(absorp valueAbsorp,int *cpt, float* tab_Ac_Cap_R, float* tab_Ac_Cap_IR);
-float* createtab();
+absorp FIR(absorp valueAbsorp,int *cpt, float** tableau);
+float** create_tableau_FIR();
