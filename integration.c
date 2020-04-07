@@ -12,7 +12,7 @@ void integrationTest(char* filename){
     float ** tab_FIR=create_tableau_FIR();
     float ** tab_IIR=create_tableau_IIR();
     float * tab_mesure=create_tableau_mesure();
-    FILE* fichier = initFichier("record1.dat");
+    FILE* fichier = initFichier(filename);
     absorp signal;
     oxy valeur;
     valeur.pouls =0;
