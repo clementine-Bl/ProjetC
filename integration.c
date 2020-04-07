@@ -3,6 +3,7 @@
 #include "fir.h"
 #include "fichiers.h"
 #include "integration.h"
+#include "mesure.h"
 
 
 void integrationTest(char* filename){
@@ -10,6 +11,7 @@ void integrationTest(char* filename){
     int cpt = 0;
     float ** tab_FIR=create_tableau_FIR();
     float ** tab_IIR=create_tableau_IIR();
+    float * tab_mesure=create_tableau_mesure();
     FILE* fichier = initFichier("record1.dat");
     absorp signal;
     oxy valeur;
@@ -17,7 +19,8 @@ void integrationTest(char* filename){
         signal=lireFichier(fichier, &etat);
         signal=FIR(signal,&cpt,tab_FIR);
         signal=IIR(signal,tab_IIR);
-
+        valeur=MESURE(signal,tab_mesure,valeur);
+        affichage(valeur);
     }
     finFichier(fichier);
     supprime_tableau_FIR(tab_FIR);

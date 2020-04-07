@@ -14,9 +14,6 @@ void affichage(oxy myOxy){
             fprintf(fichier,"%d\n%d",myOxy.spo2,myOxy.pouls);
             remove(".verrouData");
             fclose(fichier);
-            printf("c'est fait");
         }
-
     }
-
 }
