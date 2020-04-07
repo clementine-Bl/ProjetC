@@ -7,14 +7,14 @@ oxy mesureTest(char* filename){
 	myOxy.pouls =0; // initialisation avant la première
 	myOxy.spo2 =0; // initialisation avant la première
 	absorp myAbsorp;
-    FILE* record1_irr = initFichier(filename);
+    FILE* fichier = initFichier(filename);
     int etat =0;
-    myAbsorp = lireFichier(record1_irr,&etat);
+    myAbsorp = lireFichier(fichier,&etat);
     while(etat != EOF) {
         myOxy = MESURE(myAbsorp, tableau,myOxy);
-        myAbsorp = lireFichier(record1_irr, &etat);
+        myAbsorp = lireFichier(fichier, &etat);
     }
-
+    finFichier(fichier);
     return myOxy;
 
 }
@@ -117,4 +117,8 @@ void min_max(float value,float* min, float* max){
             *max = value;
         }
     }
+}
+
+void supprime_tableau_mesure(float* tableau){
+    free(tableau);
 }

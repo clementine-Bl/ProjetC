@@ -15,6 +15,8 @@ void integrationTest(char* filename){
     FILE* fichier = initFichier("record1.dat");
     absorp signal;
     oxy valeur;
+    valeur.pouls =0;
+    valeur.spo2 =0;
     while(etat != EOF){
         signal=lireFichier(fichier, &etat);
         signal=FIR(signal,&cpt,tab_FIR);
@@ -25,4 +27,5 @@ void integrationTest(char* filename){
     finFichier(fichier);
     supprime_tableau_FIR(tab_FIR);
     supprime_tableau_IIR(tab_IIR);
+    supprime_tableau_mesure(tab_mesure);
 }
