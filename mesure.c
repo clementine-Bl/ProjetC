@@ -11,14 +11,15 @@ oxy mesureTest(char* filename){
     while(etat != EOF) {
         myOxy = MESURE(myAbsorp, tableau);
         myAbsorp = lireFichier(record1_irr, &etat);
-        return myOxy;
     }
+    return myOxy;
+
 }
 
 float* create_tableau(){
     float* tableau;
     tableau =malloc(8* sizeof(float));
-    if (tableau = NULL){
+    if (tableau == NULL){
         printf("le tableau n'a pas pu être crée");
     }
     return tableau;
