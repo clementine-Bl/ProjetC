@@ -92,7 +92,6 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
                             }
                         }
                         myOxy.pouls = 30000 / tableau[4];
-                        printf("%f %d %d \n ", tableau[4], myOxy.spo2, myOxy.pouls);
                         tableau[4] = 0;
 
                     }else {
