@@ -1,14 +1,6 @@
 #include "fir.h"
 #include "fichiers.h"
-float* createtab(){
-    float* tableau;
-    tableau = malloc(50*sizeof(float));
-    if(tableau == NULL ){
-        printf("Le tableau n'a pas pu être créé");
-    }
-    return tableau;
 
-}
 absorp firTest(char* filename){
     float* tab_Ac_Cap_R = createtab();
     float* tab_Ac_Cap_IR = createtab();
@@ -28,6 +20,14 @@ absorp firTest(char* filename){
 
 }
 
+float* createtab(){
+    float* tableau;
+    tableau = malloc(50*sizeof(float));
+    if(tableau == NULL ){
+        printf("Le tableau n'a pas pu être créé");
+    }
+    return tableau;
+}
 
 absorp fir(absorp valueAbsorp,int *cpt, float* tab_Ac_Cap_R, float* tab_Ac_Cap_IR){
     absorp newAbsorp;
@@ -84,30 +84,26 @@ absorp fir(absorp valueAbsorp,int *cpt, float* tab_Ac_Cap_R, float* tab_Ac_Cap_I
             1.6465231e-004,
             1.4774946e-019
     };
-
     float sommeAC_R = FIR_TAPS[0]*valueAbsorp.acr;
     float sommeAC_IR = FIR_TAPS[0]*valueAbsorp.acir;
     int hcpt;
+    int i;
     if (*cpt>50) {
         hcpt = 50;
     }else {
         hcpt = *cpt;
     }
-
-    for (int i =0; i<hcpt;i++){
+    for (i=0;i<hcpt;i++){
         sommeAC_R += FIR_TAPS[i+1] * (tab_Ac_Cap_R[(*cpt-i) % 50]);
         sommeAC_IR += FIR_TAPS[i+1] * (tab_Ac_Cap_IR[(*cpt-i) % 50]);
     }
     *cpt = *cpt + 1;
     tab_Ac_Cap_R[*cpt % 50] = valueAbsorp.acr;
     tab_Ac_Cap_IR[*cpt % 50] = valueAbsorp.acir;
-
-
     newAbsorp.acr= sommeAC_R;
     newAbsorp.acir =sommeAC_IR;
     newAbsorp.dcir =valueAbsorp.dcir;
     newAbsorp.dcr = valueAbsorp.dcr;
-
     return newAbsorp;
 }
 

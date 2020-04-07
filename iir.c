@@ -29,12 +29,13 @@ absorp IIR (absorp my, float ** tableau){
 
 float** create_tableau(){
     float** tableau;
+    int i;
     tableau=malloc(2* sizeof(float*));
     if (tableau != NULL){
         tableau[0]=malloc(2* sizeof(float));
         tableau[1]=malloc(2* sizeof(float));
         if (tableau[0] != NULL && tableau[1] != NULL) {
-            for (int i = 0; i < 2; i++) {
+            for (i=0;i<2;i++) {
                 tableau[0][i] = 0;
                 tableau[1][i] = 0;
             }

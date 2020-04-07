@@ -19,7 +19,6 @@ absorp lireFichier(FILE* pf, int* etat){
 	myAbsorp.dcr=b;
 	myAbsorp.acir=c;
 	myAbsorp.dcir=d;
-	printf("%d,%d,%d,%d",a,b,c,d);
 	return myAbsorp;
 }
 
