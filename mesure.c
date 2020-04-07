@@ -9,10 +9,10 @@ oxy mesureTest(char* filename){
     int etat =0;
     myAbsorp = lireFichier(record1_irr,&etat);
     while(etat != EOF) {
-        myOxy = MESURE(myAbsorp, tableau);
-        printf("spo2 = %d et pouls = %d\n",myOxy.spo2,myOxy.pouls);
+        MESURE(myAbsorp, tableau,myOxy);
         myAbsorp = lireFichier(record1_irr, &etat);
     }
+
     return myOxy;
 
 }
@@ -26,9 +26,9 @@ float* create_tableau(){
     return tableau;
 }
 
-oxy MESURE(absorp myAbsorp, float* tableau){
+void MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
     float ratio;
-    oxy oxy;
+
     /*Tableau[0] = min_ac_r
      Tableau[1] = max_ac_r
      Tableau[2] = min_ac_ir
@@ -83,25 +83,25 @@ oxy MESURE(absorp myAbsorp, float* tableau){
                         /* Calcul du ratio : Tableau[1]-Tableau[0] : max-min amplitude crête à crête de ac_r
                          Tableau[3]-Tableau[2] : max-min amplitude crête à crête de ac_ir*/
                         if (ratio <= 1) {
-                            oxy.spo2 = (-25) * ratio + 110;
+                            myOxy.spo2 = (-25) * ratio + 110;
                         } else {
-                            oxy.spo2 = (-357) * ratio + 127.38;
+                            myOxy.spo2 = (-357) * ratio + 127.38;
                         }
-                        oxy.pouls = 30000 / tableau[4];
-                        printf("%f %d %d \n ", tableau[4], oxy.spo2, oxy.pouls);
+                        myOxy.pouls = 30000 / tableau[4];
+                        printf("%f %d %d \n ", tableau[4], myOxy.spo2, myOxy.pouls);
                         tableau[4] = 0;
 
                     }else {
                         min_max(myAbsorp.acr, &tableau[0], &tableau[1]);
                         min_max(myAbsorp.acir, &tableau[2], &tableau[3]);
-                        tableau[4] += 1;
+                        tableau[4] = tableau[4] + 1;
                     }
                 }
 
             }
         }
     }
-    return oxy;
+
 }
 
 
