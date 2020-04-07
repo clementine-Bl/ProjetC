@@ -3,7 +3,11 @@
 float* createtab(){
     float* tableau;
     tableau = malloc(50*sizeof(float));
-    return tableau;
+    if(tableau == NULL ){
+        printf("Le tableau n'a pas pu être créé");
+    }else{
+        return tableau;
+    }
 }
 absorp firTest(char* filename){
     float* tab_Ac_Cap_R = createtab();
@@ -19,6 +23,7 @@ absorp firTest(char* filename){
         newAbsorp = lireFichier(record1,&etat);
 	}
 	finFichier(record1);
+
 	return myAbsorp;
 
 }
@@ -88,16 +93,18 @@ absorp fir(absorp valueAbsorp,int *cpt, float* tab_Ac_Cap_R, float* tab_Ac_Cap_I
     }else {
         hcpt = *cpt;
     }
+
     for (int i =0; i<hcpt;i++){
-        sommeAC_R += FIR_TAPS[i+1] * (tab_Ac_Cap_R[*cpt % 50]);
-        sommeAC_IR += FIR_TAPS[i+1] * (tab_Ac_Cap_IR[*cpt % 50]);
+        sommeAC_R += FIR_TAPS[i+1] * (tab_Ac_Cap_R[(*cpt-i) % 50]);
+        sommeAC_IR += FIR_TAPS[i+1] * (tab_Ac_Cap_IR[(*cpt-i) % 50]);
     }
+    *cpt = *cpt + 1;
     tab_Ac_Cap_R[*cpt % 50] = valueAbsorp.acr;
     tab_Ac_Cap_IR[*cpt % 50] = valueAbsorp.acir;
-    *cpt = *cpt + 1;
 
-    newAbsorp.acr= valueAbsorp.acr;
-    newAbsorp.acir =valueAbsorp.acir;
+
+    newAbsorp.acr= sommeAC_R;
+    newAbsorp.acir =sommeAC_IR;
     newAbsorp.dcir =valueAbsorp.dcir;
     newAbsorp.dcr = valueAbsorp.dcr;
 
