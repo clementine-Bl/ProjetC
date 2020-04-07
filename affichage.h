@@ -1,4 +1,4 @@
 #include "define.h"
 
 
-void affichage(int x,int y);
+void affichage(oxy myOxy);
