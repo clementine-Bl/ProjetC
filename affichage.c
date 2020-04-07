@@ -13,6 +13,8 @@ void affichage(oxy myOxy){
             FILE* verrou=fopen(".verrouData","w");
             fprintf(fichier,"%d\n%d",myOxy.spo2,myOxy.pouls);
             remove(".verrouData");
+            fclose(fichier);
+            printf("c'est fait");
         }
 
     }
