@@ -9,7 +9,7 @@ oxy mesureTest(char* filename){
     int etat =0;
     myAbsorp = lireFichier(record1_irr,&etat);
     while(etat != EOF) {
-        MESURE(myAbsorp, tableau,myOxy);
+        myOxy = MESURE(myAbsorp, tableau,myOxy);
         myAbsorp = lireFichier(record1_irr, &etat);
     }
 
@@ -26,7 +26,7 @@ float* create_tableau(){
     return tableau;
 }
 
-void MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
+oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
     float ratio;
 
     /*Tableau[0] = min_ac_r
@@ -101,7 +101,7 @@ void MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
             }
         }
     }
-
+    return myOxy;
 }
 
 
