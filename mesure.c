@@ -4,6 +4,8 @@
 oxy mesureTest(char* filename){
     float* tableau = create_tableau();
 	oxy myOxy;
+	myOxy.pouls =0; // initialisation avant la première
+	myOxy.spo2 =0; // initialisation avant la première
 	absorp myAbsorp;
     FILE* record1_irr = initFichier(filename);
     int etat =0;
@@ -82,10 +84,12 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
                         ratio = ((tableau[1] - tableau[0]) / myAbsorp.dcr) / ((tableau[3] - tableau[2]) / myAbsorp.dcir);
                         /* Calcul du ratio : Tableau[1]-Tableau[0] : max-min amplitude crête à crête de ac_r
                          Tableau[3]-Tableau[2] : max-min amplitude crête à crête de ac_ir*/
-                        if (ratio <= 1) {
+                        if (ratio <= 1 && ratio >= 0.4) {
                             myOxy.spo2 = (-25) * ratio + 110;
                         } else {
-                            myOxy.spo2 = (-357) * ratio + 127.38;
+                            if(ratio <=3.4 && ratio > 1) {
+                                myOxy.spo2 = (-35.7) * ratio + 121.38;
+                            }
                         }
                         myOxy.pouls = 30000 / tableau[4];
                         printf("%f %d %d \n ", tableau[4], myOxy.spo2, myOxy.pouls);
