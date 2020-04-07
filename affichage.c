@@ -3,7 +3,7 @@
 
 void affichage(oxy myOxy){
     if (access(".verrouData",F_OK)!=-1){
-        printf("Attention l'interface lit les données");
+        printf("Attention l'interface lit les données\n");
     }else{
         FILE* fichier=fopen("Data.txt","w+");
         if(fichier==NULL){
