@@ -37,6 +37,8 @@ float** create_tableau(){
             tableau[0][i]=0;
             tableau[1][i]=0;
         }
+    }else{
+        printf("le tableau n'a pas pu être crée");
     }
     return tableau;
 }
