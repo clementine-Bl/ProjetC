@@ -10,6 +10,7 @@ oxy mesureTest(char* filename){
     myAbsorp = lireFichier(record1_irr,&etat);
     while(etat != EOF) {
         myOxy = MESURE(myAbsorp, tableau);
+        printf("spo2 = %d et pouls = %d\n",myOxy.spo2,myOxy.pouls);
         myAbsorp = lireFichier(record1_irr, &etat);
     }
     return myOxy;
@@ -42,10 +43,11 @@ oxy MESURE(absorp myAbsorp, float* tableau){
         tableau[1]= tableau[7]; // initialisation du max ac_r
         tableau[2]= myAbsorp.acir; // initialisation du min ac_ir
         tableau[3]= myAbsorp.acir; // initialisation du max ac_ir
-        tableau[4] +=1 ;
+        tableau[4] = tableau[4] + 1;
         tableau[5]=0;
     }else{
         if(tableau[4]==1){
+
             if(myAbsorp.acr > tableau[7]){
                 tableau[6] = 1;
             }else{
@@ -54,10 +56,12 @@ oxy MESURE(absorp myAbsorp, float* tableau){
             min_max(myAbsorp.acr,&tableau[0],&tableau[1]);
             min_max(myAbsorp.acir,&tableau[2],&tableau[3]);
 
-            tableau[4] += 1;
+            tableau[4] = tableau[4] + 1;
         }else{
             if(tableau[5] != 1){ // On fait tant qu'une demi periode n'est pas faite
+
                 if((tableau[6] == 1 && myAbsorp.acr < tableau[7]) || (tableau[6] == 0 && myAbsorp.acr > tableau[7])){
+
                     /* Si le debut commençait de façon croissante et que notre nouvelle valeur est plus petite que notre valeur de départ
                      une demi periode est passé*/
                     /* Ou bien si le debut commençait de façon décroissante et que notre nouvelle valeur est plus grande que notre valeur de départ
@@ -66,28 +70,33 @@ oxy MESURE(absorp myAbsorp, float* tableau){
                 }
                 min_max(myAbsorp.acr,&tableau[0],&tableau[1]);
                 min_max(myAbsorp.acir,&tableau[2],&tableau[3]);
-                tableau[4] +=1;
-            }if(tableau[5] == 1){
-                if((tableau[6] == 1 && myAbsorp.acr > tableau[7]) || (tableau[6] == 0 && myAbsorp.acr < tableau[7])) {
-                    /*Une demi periode est déjà passé
-                     Si le debut commençait de façon croissante et que notre nouvelle valeur est plus grande que notre valeur de départ
-                     une periode est passé*/
-                    /* Ou bien si le debut commençait de façon décroissante et que notre nouvelle valeur est plus petite que notre valeur de départ
-                     une periode est passé*/
-                    ratio =((tableau[1]-tableau[0])/myAbsorp.dcr)/((tableau[3]-tableau[2])/myAbsorp.dcir);
-                    /* Calcul du ratio : Tableau[1]-Tableau[0] : max-min amplitude crête à crête de ac_r
-                     Tableau[3]-Tableau[2] : max-min amplitude crête à crête de ac_ir*/
-                    if (ratio <= 1) {
-                        oxy.spo2 = (-25 )* ratio + 110;
+                tableau[4] = tableau[4] + 1;
+            }else {
+                if (tableau[5] == 1) {
+                    if((tableau[6] == 1 && myAbsorp.acr > tableau[7]) || (tableau[6] == 0 && myAbsorp.acr < tableau[7])) {
+                        /*Une demi periode est déjà passé
+                         Si le debut commençait de façon croissante et que notre nouvelle valeur est plus grande que notre valeur de départ
+                         une periode est passé*/
+                        /* Ou bien si le debut commençait de façon décroissante et que notre nouvelle valeur est plus petite que notre valeur de départ
+                         une periode est passé*/
+                        ratio = ((tableau[1] - tableau[0]) / myAbsorp.dcr) / ((tableau[3] - tableau[2]) / myAbsorp.dcir);
+                        /* Calcul du ratio : Tableau[1]-Tableau[0] : max-min amplitude crête à crête de ac_r
+                         Tableau[3]-Tableau[2] : max-min amplitude crête à crête de ac_ir*/
+                        if (ratio <= 1) {
+                            oxy.spo2 = (-25) * ratio + 110;
+                        } else {
+                            oxy.spo2 = (-357) * ratio + 127.38;
+                        }
+                        oxy.pouls = 30000 / tableau[4];
+                        printf("%f %d %d \n ", tableau[4], oxy.spo2, oxy.pouls);
+                        tableau[4] = 0;
+
                     }else {
-                        oxy.spo2 = (-357) * ratio + 127.38;
+                        min_max(myAbsorp.acr, &tableau[0], &tableau[1]);
+                        min_max(myAbsorp.acir, &tableau[2], &tableau[3]);
+                        tableau[4] += 1;
                     }
-                    oxy.pouls = 60 * (1/(0.002*tableau[4]));
-                    tableau[4] = 0;
                 }
-                min_max(myAbsorp.acr,&tableau[0],&tableau[1]);
-                min_max(myAbsorp.acir,&tableau[2],&tableau[3]);
-                tableau[4] +=1;
 
             }
         }
