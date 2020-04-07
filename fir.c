@@ -10,11 +10,13 @@ absorp firTest(char* filename){
     float* tab_Ac_Cap_IR = createtab();
     int cpt=0;
 	absorp	myAbsorp;
+	absorp newAbsorp;
 	FILE* record1 = initFichier(filename);
-	int etat = 0;
+	int etat =0;
+	newAbsorp = lireFichier(record1,&etat);
 	while(etat != EOF){
-        myAbsorp = lireFichier(record1,&etat);
-        myAbsorp = fir(myAbsorp,&cpt,&tab_Ac_Cap_R,&tab_Ac_Cap_IR);
+        myAbsorp = fir(newAbsorp,&cpt,tab_Ac_Cap_R,tab_Ac_Cap_IR);
+        newAbsorp = lireFichier(record1,&etat);
 	}
 	finFichier(record1);
 	return myAbsorp;
