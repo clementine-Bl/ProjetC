@@ -5,9 +5,9 @@ float* createtab(){
     tableau = malloc(50*sizeof(float));
     if(tableau == NULL ){
         printf("Le tableau n'a pas pu être créé");
-    }else{
-        return tableau;
     }
+    return tableau;
+
 }
 absorp firTest(char* filename){
     float* tab_Ac_Cap_R = createtab();
