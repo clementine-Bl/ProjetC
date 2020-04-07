@@ -17,12 +17,13 @@ void integrationTest(char* filename){
     oxy valeur;
     valeur.pouls =0;
     valeur.spo2 =0;
+    signal=lireFichier(fichier, &etat);
     while(etat != EOF){
-        signal=lireFichier(fichier, &etat);
         signal=FIR(signal,&cpt,tab_FIR);
         signal=IIR(signal,tab_IIR);
         valeur=MESURE(signal,tab_mesure,valeur);
         affichage(valeur);
+        signal=lireFichier(fichier, &etat);
     }
     finFichier(fichier);
     supprime_tableau_FIR(tab_FIR);
