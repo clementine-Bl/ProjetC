@@ -2,7 +2,7 @@
 #include "fichiers.h"
 
 oxy mesureTest(char* filename){
-    float* tableau = create_tableau();
+    float* tableau = create_tableau_mesure();
 	oxy myOxy;
 	myOxy.pouls =0; // initialisation avant la première
 	myOxy.spo2 =0; // initialisation avant la première
@@ -19,7 +19,7 @@ oxy mesureTest(char* filename){
 
 }
 
-float* create_tableau(){
+float* create_tableau_mesure(){
     float* tableau;
     tableau =malloc(8* sizeof(float));
     if (tableau == NULL){
