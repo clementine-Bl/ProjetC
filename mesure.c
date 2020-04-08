@@ -22,8 +22,13 @@ oxy mesureTest(char* filename){
 
 float* create_tableau_mesure(){
     float* tableau;
+    int i;
     tableau =malloc(8* sizeof(float));
-    if (tableau == NULL){
+    if (tableau != NULL) {
+        for (i=0;i<8;i++){
+            tableau[i]=0;
+        }
+    }else{
         printf("le tableau n'a pas pu être crée");
     }
     return tableau;
