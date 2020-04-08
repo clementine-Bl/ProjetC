@@ -13,7 +13,7 @@ oxy mesureTest(char* filename){
     while(etat != EOF) {
         myOxy = MESURE(myAbsorp, tableau,myOxy);
         myAbsorp = lireFichier(fichier, &etat);
-        printf("%d et %d\n",myOxy.spo2,myOxy.pouls);
+        //printf("%d et %d\n",myOxy.spo2,myOxy.pouls);
     }
     finFichier(fichier);
     supprime_tableau_mesure(tableau);
@@ -52,16 +52,17 @@ float* create_tableau_mesure(){
 oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
     float ratio;
     int i;
-    if(tableau[12]==0){
+    if(tableau[6] == 0){
         if(myAbsorp.acr>0){
-            tableau[12]=1;
+            tableau[7]=0;
+        }else{
+            tableau[7]=1;
+        }
+
+        && tableau[7]<=0) || (myAbsorp.acr<0 && tableau[7]>=0)){
+            tableau[6]=1;
         }
     }else{
-        if(tableau[12]==1){
-           if(myAbsorp.acr<0){
-               tableau[12]=2;
-           }
-        }else{
             if(tableau[4]==0){
                     tableau[7] = myAbsorp.acr;  //la première valeur va servir de valeur de debut de période
                     tableau[0] = tableau[7]; // initialisation du min ac_r
@@ -123,8 +124,7 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
                                     compteur_periode += 1;
                                 }
                             }
-                            myOxy.pouls = ((30000 / tableau[4]) + tableau[11]) /
-                                          compteur_periode;//formule pour calculer la frequence en BPM à partir du nombre de valeur prise pendant une periode
+                            myOxy.pouls = ((30000 / tableau[4]) + tableau[11]) /compteur_periode;//formule pour calculer la frequence en BPM à partir du nombre de valeur prise pendant une periode
                             for (i = 10; i > 8; i--) {
                                 tableau[i] = tableau[i - 1];
                             }
@@ -133,8 +133,7 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
                             tableau[4] = 0; // on remet le compteur de valeur à 0 car on a fini une periode
 
                         } else {
-                            mise_a_jour(&tableau[4], myAbsorp.acr, &tableau[0], &tableau[1], myAbsorp.acir, &tableau[2],
-                                        &tableau[3]);
+                            mise_a_jour(&tableau[4], myAbsorp.acr, &tableau[0], &tableau[1], myAbsorp.acir, &tableau[2],&tableau[3]);
                         }
                     }
                 }
