@@ -67,9 +67,14 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
         }
     }else{
             if(tableau[4]==0){
-                    tableau[7] = myAbsorp.acr;  //la première valeur va servir de valeur de debut de période
-                    tableau[0] = tableau[7]; // initialisation du min ac_r
-                    tableau[1]= tableau[7]; // initialisation du max ac_r
+                    if (tableau[7]==1) {
+                        tableau[7] = 0;
+                    }else {
+                        tableau[7] = 1;
+                    }
+
+                    tableau[0] = myAbsorp.acr; // initialisation du min ac_r
+                    tableau[1]= myAbsorp.acr; // initialisation du max ac_r
                     tableau[2]= myAbsorp.acir; // initialisation du min ac_ir
                     tableau[3]= myAbsorp.acir; // initialisation du max ac_ir
                     tableau[4] = tableau[4] + 1; // on incrémente le compteur de 1 car on a étudié une valeur de ac
