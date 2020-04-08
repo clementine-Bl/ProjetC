@@ -15,9 +15,7 @@ absorp firTest(char* filename){
 	}
 	finFichier(record1);
 	supprime_tableau_FIR(parametre_FIR);
-
 	return myAbsorp;
-
 }
 
 float** create_tableau_FIR(){    //tableau a 2 lignes : premiere ligne contient les ACR  et  la deuxieme contient les ACIR

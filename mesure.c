@@ -56,13 +56,12 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
         if(tableau[12]==0) {
             if (myAbsorp.acr > 0) {
                 tableau[7] = 0;
-            } else {
+            }else{
                 tableau[7] = 1;
             }
             tableau[12]=1;
-        }
-
-        if((tableau[7] ==1 && myAbsorp.acr<=0)||(tableau[7] == 1 && myAbsorp.acr >= 0)) {
+        }else{
+            if((tableau[7] ==0 && myAbsorp.acr<=0)||(tableau[7] == 1 && myAbsorp.acr >= 0)) {
             tableau[6] = 1;
         }
     }else{
