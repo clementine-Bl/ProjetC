@@ -97,17 +97,12 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
                         if (ratio <= 1) {   //l'équation entre le ration et spo2 est différente si on est inférieur ou supérieur à 1
                             myOxy.spo2 = (-25) * ratio + 110;   //équations trouvé à l'aide du graphique
                         } else {
-                            if(ratio > 1) {
-                                myOxy.spo2 = (-35.7) * ratio + 121.38;  //équations trouvé à l'aide du graphique
-                            }
+                            myOxy.spo2 = (-35.7) * ratio + 121.38;  //équations trouvé à l'aide du graphique
+
                         }
                         if(tableau[8]==0){
                             tableau[9]=tableau[4];
                             tableau[8]= tableau[4];
-                        }else{
-                            if (tableau[9]==0){
-                                tableau[9]=tableau[4];
-                            }
                         }
                         myOxy.pouls = 30000 / ((tableau[4]+tableau[8]+tableau[9])/3);   //formule pour calculer la frequence en BPM à partir du nombre de valeur prise pendant une periode
                         tableau[9] = tableau[8];
