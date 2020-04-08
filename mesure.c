@@ -21,12 +21,21 @@ oxy mesureTest(char* filename){
 }
 
 float* create_tableau_mesure(){
+    /* On crée un tableau pour stocker les variables dont on a besoin à chaque appelle de mesure
+     Tableau[0] = min_ac_r
+     Tableau[1] = max_ac_r
+     Tableau[2] = min_ac_ir
+     Tableau[3] = max_ac_ir
+     Tableau[4] = compteur valeur pendant une periode
+     Tableau[5] = 1 ou 0 si la demi-periode est faite
+     Tableau[6] = 1 croissant ou 0 decroissant sens du premier point de lecture
+     Tableau[7] = valeur de début de periode*/
     float* tableau;
     int i;
-    tableau =malloc(8* sizeof(float));
+    tableau =malloc(8* sizeof(float));  //on alloue 8 espace memoire
     if (tableau != NULL) {
         for (i=0;i<8;i++){
-            tableau[i]=0;
+            tableau[i]=0;  //on initialise chaque element à 0
         }
     }else{
         printf("le tableau n'a pas pu être crée");
@@ -36,17 +45,8 @@ float* create_tableau_mesure(){
 
 oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
     float ratio;
-
-    /*Tableau[0] = min_ac_r
-     Tableau[1] = max_ac_r
-     Tableau[2] = min_ac_ir
-     Tableau[3] = max_ac_ir
-     Tableau[4] = compteur valeur pendant une periode
-     Tableau[5] = 1 ou 0 si la demi-periode est faite
-     Tableau[6] = 1 croissant ou 0 decroissant sens du premier point de lecture
-     Tableau[7] = valeur de début de periode*/
     if(tableau[4]==0){
-        tableau[7] = myAbsorp.acr;
+        tableau[7] = myAbsorp.acr;  //la première valeur va servir de valeur de debut de période
         tableau[0] = tableau[7]; // initialisation du min ac_r
         tableau[1]= tableau[7]; // initialisation du max ac_r
         tableau[2]= myAbsorp.acir; // initialisation du min ac_ir
