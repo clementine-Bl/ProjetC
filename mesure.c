@@ -13,6 +13,7 @@ oxy mesureTest(char* filename){
     while(etat != EOF) {
         myOxy = MESURE(myAbsorp, tableau,myOxy);
         myAbsorp = lireFichier(fichier, &etat);
+        printf("%d et %d\n",myOxy.spo2,myOxy.pouls);
     }
     finFichier(fichier);
     supprime_tableau_mesure(tableau);
@@ -37,9 +38,9 @@ float* create_tableau_mesure(){
      tableau[18] = somme*/
     float* tableau;
     int i;
-    tableau =malloc(19* sizeof(float));  //on alloue 10 espace memoire
+    tableau =malloc(16* sizeof(float));  //on alloue 10 espace memoire
     if (tableau != NULL) {
-        for (i=0;i<19;i++){
+        for (i=0;i<16;i++){
             tableau[i]=0;  //on initialise chaque element à 0
         }
     }else{
@@ -67,27 +68,22 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
             }else{
                 tableau[6] = 0;
             }
-            min_max(myAbsorp.acr,&tableau[0],&tableau[1]);
-            min_max(myAbsorp.acir,&tableau[2],&tableau[3]);
-
-            tableau[4] = tableau[4] + 1;
+            mise_a_jour(&tableau[4],myAbsorp.acr, &tableau[0], &tableau[1],myAbsorp.acir, &tableau[2],&tableau[3]);
         }else{
             if(tableau[5] != 1){ // On fait tant qu'une demi periode n'est pas faite
 
-                if((tableau[6] == 1 && myAbsorp.acr < tableau[7]) || (tableau[6] == 0 && myAbsorp.acr > tableau[7])){
-
+                if((tableau[6] == 1 && myAbsorp.acr <= tableau[7]) || (tableau[6] == 0 && myAbsorp.acr > tableau[7])){
+                    mise_a_jour(&tableau[4],myAbsorp.acr, &tableau[0], &tableau[1],myAbsorp.acir, &tableau[2],&tableau[3]);
                     /* Si le debut commençait de façon croissante et que notre nouvelle valeur est plus petite que notre valeur de départ alors
                      une demi periode est passé*/
                     /* Ou bien si le debut commençait de façon décroissante et que notre nouvelle valeur est plus grande que notre valeur de départ alors
                      une demi periode est passé*/
                     tableau[5]=1;
                 }
-                min_max(myAbsorp.acr,&tableau[0],&tableau[1]);
-                min_max(myAbsorp.acir,&tableau[2],&tableau[3]);
-                tableau[4] = tableau[4] + 1;
+                mise_a_jour(&tableau[4],myAbsorp.acr, &tableau[0], &tableau[1],myAbsorp.acir, &tableau[2],&tableau[3]);
             }else {
-                    if((tableau[6] == 1 && myAbsorp.acr > tableau[7]) || (tableau[6] == 0 && myAbsorp.acr < tableau[7])) {
-
+                    if((tableau[6] == 1 && myAbsorp.acr >= tableau[7]) || (tableau[6] == 0 && myAbsorp.acr < tableau[7])) {
+                        mise_a_jour(&tableau[4],myAbsorp.acr, &tableau[0], &tableau[1],myAbsorp.acir, &tableau[2],&tableau[3]);
                         /*on sait que une demi periode est déjà passée
                          Si le debut commençait de façon croissante et que notre nouvelle valeur est plus grande que notre valeur de départ alors
                          une periode est passée en tout */
@@ -105,24 +101,22 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
 
                         }
                         int compteur_periode = 1;
-                        for (i=8;i<18;i++){
+                        for (i=8;i<11;i++){
                             if (tableau[i] != 0){
-                                tableau[18] += tableau[i];
+                                tableau[11] += tableau[i];
                                 compteur_periode +=1;
                             }
                         }
-                        myOxy.pouls = ((30000 / tableau[4]) + tableau[18])/compteur_periode;   //formule pour calculer la frequence en BPM à partir du nombre de valeur prise pendant une periode
-                        for (i=17;i>8;i--){
+                        myOxy.pouls = ((30000 / tableau[4]) + tableau[11])/compteur_periode;//formule pour calculer la frequence en BPM à partir du nombre de valeur prise pendant une periode
+                        for (i=10;i>8;i--){
                             tableau[i] = tableau[i-1];
                         }
                         tableau[8]=30000/tableau[4];
-                        tableau[18]=0;
+                        tableau[11]=0;
                         tableau[4] = 0; // on remet le compteur de valeur à 0 car on a fini une periode
 
                     }else {
-                        min_max(myAbsorp.acr, &tableau[0], &tableau[1]);
-                        min_max(myAbsorp.acir, &tableau[2], &tableau[3]);
-                        tableau[4] = tableau[4] + 1;
+                        mise_a_jour(&tableau[4],myAbsorp.acr, &tableau[0], &tableau[1],myAbsorp.acir, &tableau[2],&tableau[3]);
                     }
             }
         }
@@ -141,6 +135,11 @@ void min_max(float value,float* min, float* max){
     }
 }
 
+void mise_a_jour(float* tableau4 ,float value1, float* tableau0 , float* tableau1,float value2, float* tableau2,float* tableau3){
+    min_max(value1, tableau0, tableau1);
+    min_max(value2, tableau2,tableau3);
+    *tableau4 = *tableau4 + 1;
+}
 void supprime_tableau_mesure(float* tableau){
     free(tableau);
 }
