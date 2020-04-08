@@ -114,7 +114,7 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
                         }
                         myOxy.pouls = 30000 / (tableau[18]/10);   //formule pour calculer la frequence en BPM à partir du nombre de valeur prise pendant une periode
                         for (i=17;i>8;i--){
-                            tableau[i] += tableau[i-1];
+                            tableau[i] = tableau[i-1];
                         }
                         tableau[8]=tableau[4];
                         tableau[4] = 0; // on remet le compteur de valeur à 0 car on a fini une periode
