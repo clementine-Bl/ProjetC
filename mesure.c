@@ -15,6 +15,7 @@ oxy mesureTest(char* filename){
         myAbsorp = lireFichier(fichier, &etat);
     }
     finFichier(fichier);
+    supprime_tableau_mesure(tableau);
     return myOxy;
 
 }
@@ -35,7 +36,7 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
      Tableau[1] = max_ac_r
      Tableau[2] = min_ac_ir
      Tableau[3] = max_ac_ir
-     Tableau[4] = compteur periode
+     Tableau[4] = compteur valeur pendant une periode
      Tableau[5] = 1 ou 0 si la demi-periode est faite
      Tableau[6] = 1 croissant ou 0 decroissant sens du premier point de lecture
      Tableau[7] = valeur de début de periode*/
@@ -45,7 +46,7 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
         tableau[1]= tableau[7]; // initialisation du max ac_r
         tableau[2]= myAbsorp.acir; // initialisation du min ac_ir
         tableau[3]= myAbsorp.acir; // initialisation du max ac_ir
-        tableau[4] = tableau[4] + 1;
+        tableau[4] = tableau[4] + 1; // on incrémente le compteur de 1 car on a étudié une valeur de ac
         tableau[5]=0;
     }else{
         if(tableau[4]==1){
@@ -64,9 +65,9 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
 
                 if((tableau[6] == 1 && myAbsorp.acr < tableau[7]) || (tableau[6] == 0 && myAbsorp.acr > tableau[7])){
 
-                    /* Si le debut commençait de façon croissante et que notre nouvelle valeur est plus petite que notre valeur de départ
+                    /* Si le debut commençait de façon croissante et que notre nouvelle valeur est plus petite que notre valeur de départ alors
                      une demi periode est passé*/
-                    /* Ou bien si le debut commençait de façon décroissante et que notre nouvelle valeur est plus grande que notre valeur de départ
+                    /* Ou bien si le debut commençait de façon décroissante et que notre nouvelle valeur est plus grande que notre valeur de départ alors
                      une demi periode est passé*/
                     tableau[5]=1;
                 }
@@ -74,33 +75,34 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
                 min_max(myAbsorp.acir,&tableau[2],&tableau[3]);
                 tableau[4] = tableau[4] + 1;
             }else {
-                if (tableau[5] == 1) {
                     if((tableau[6] == 1 && myAbsorp.acr > tableau[7]) || (tableau[6] == 0 && myAbsorp.acr < tableau[7])) {
-                        /*Une demi periode est déjà passé
-                         Si le debut commençait de façon croissante et que notre nouvelle valeur est plus grande que notre valeur de départ
-                         une periode est passé*/
-                        /* Ou bien si le debut commençait de façon décroissante et que notre nouvelle valeur est plus petite que notre valeur de départ
-                         une periode est passé*/
+
+                        /*on sait que une demi periode est déjà passée
+                         Si le debut commençait de façon croissante et que notre nouvelle valeur est plus grande que notre valeur de départ alors
+                         une periode est passée en tout */
+                        /* Ou bien si le debut commençait de façon décroissante et que notre nouvelle valeur est plus petite que notre valeur de départ alors
+                         une periode est passée en tout */
+
                         ratio = ((tableau[1] - tableau[0]) / myAbsorp.dcr) / ((tableau[3] - tableau[2]) / myAbsorp.dcir);
                         /* Calcul du ratio : Tableau[1]-Tableau[0] : max-min amplitude crête à crête de ac_r
-                         Tableau[3]-Tableau[2] : max-min amplitude crête à crête de ac_ir*/
-                        if (ratio <= 1 && ratio >= 0.4) {
-                            myOxy.spo2 = (-25) * ratio + 110;
+                                             Tableau[3]-Tableau[2] : max-min amplitude crête à crête de ac_ir*/
+
+                        if (ratio <= 1) {   //l'équation entre le ration et spo2 est différente si on est inférieur ou supérieur à 1
+                            myOxy.spo2 = (-25) * ratio + 110;   //équations trouvé à l'aide du graphique
                         } else {
-                            if(ratio <=3.4 && ratio > 1) {
-                                myOxy.spo2 = (-35.7) * ratio + 121.38;
+                            if(ratio > 1) {
+                                myOxy.spo2 = (-35.7) * ratio + 121.38;  //équations trouvé à l'aide du graphique
                             }
                         }
-                        myOxy.pouls = 30000 / tableau[4];
-                        tableau[4] = 0;
+                        myOxy.pouls = 30000 / tableau[4];   //formule pour calculer la frequence en BPM à partir du nombre de valeur prise pendant une periode
+
+                        tableau[4] = 0; // on remet le compteur de valeur à 0 car on a fini une periode
 
                     }else {
                         min_max(myAbsorp.acr, &tableau[0], &tableau[1]);
                         min_max(myAbsorp.acir, &tableau[2], &tableau[3]);
                         tableau[4] = tableau[4] + 1;
                     }
-                }
-
             }
         }
     }
@@ -109,10 +111,10 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
 
 
 void min_max(float value,float* min, float* max){
-    if(value < *min){ // mise à jour de min ac_ir
+    if(value < *min){ // mise à jour de min
         *min = value;
     }else {
-        if (value > *max) { // mise à jour de max ac_ir que si myAbsorb n'est pas déjà un min
+        if (value > *max) { // mise à jour de max que si value n'est pas déjà un min
             *max = value;
         }
     }

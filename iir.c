@@ -12,6 +12,7 @@ absorp iirTest(char* filename){
         myAbsorp=lireFichier(fichier,&etat);
     }while(etat != EOF);
     finFichier(fichier);
+    supprime_tableau_IIR(parametre_IIR);
     return new;
 }
 

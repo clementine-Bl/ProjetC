@@ -14,6 +14,7 @@ absorp firTest(char* filename){
         newAbsorp = lireFichier(record1,&etat);
 	}
 	finFichier(record1);
+	supprime_tableau_FIR(parametre_FIR);
 
 	return myAbsorp;
 
