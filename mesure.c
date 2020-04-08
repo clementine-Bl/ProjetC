@@ -29,12 +29,14 @@ float* create_tableau_mesure(){
      Tableau[4] = compteur valeur pendant une periode
      Tableau[5] = 1 ou 0 si la demi-periode est faite
      Tableau[6] = 1 croissant ou 0 decroissant sens du premier point de lecture
-     Tableau[7] = valeur de début de periode*/
+     Tableau[7] = valeur de début de periode
+     Tableau[8] = valeur du compteur valeur pendant une periode n-1
+     Tableau[9] = valeur du compteur valeur pendant une periode n-2*/
     float* tableau;
     int i;
-    tableau =malloc(8* sizeof(float));  //on alloue 8 espace memoire
+    tableau =malloc(10* sizeof(float));  //on alloue 10 espace memoire
     if (tableau != NULL) {
-        for (i=0;i<8;i++){
+        for (i=0;i<10;i++){
             tableau[i]=0;  //on initialise chaque element à 0
         }
     }else{
@@ -99,8 +101,17 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
                                 myOxy.spo2 = (-35.7) * ratio + 121.38;  //équations trouvé à l'aide du graphique
                             }
                         }
-                        myOxy.pouls = 30000 / tableau[4];   //formule pour calculer la frequence en BPM à partir du nombre de valeur prise pendant une periode
-
+                        if(tableau[9]==0){
+                            tableau[9]=tableau[4];
+                            tableau[8]= tableau[4];
+                        }else{
+                            if (tableau[8]==0){
+                                tableau[8]=tableau[4];
+                            }
+                        }
+                        myOxy.pouls = 30000 / ((tableau[4]+tableau[8]+tableau[9])/3);   //formule pour calculer la frequence en BPM à partir du nombre de valeur prise pendant une periode
+                        tableau[9] = tableau[8];
+                        tableau[8] = tableau[4];
                         tableau[4] = 0; // on remet le compteur de valeur à 0 car on a fini une periode
 
                     }else {
