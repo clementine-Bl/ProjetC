@@ -116,6 +116,7 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
                             tableau[i] = tableau[i-1];
                         }
                         tableau[8]=tableau[4];
+                        tableau[18]=0;
                         tableau[4] = 0; // on remet le compteur de valeur à 0 car on a fini une periode
 
                     }else {
