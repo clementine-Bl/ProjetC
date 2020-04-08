@@ -52,13 +52,15 @@ float* create_tableau_mesure(){
 oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
     float ratio;
     int i;
-    if(tableau[6] == 0){
-        if(myAbsorp.acr>0){
-            tableau[7]=0;
-        }else{
-            tableau[7]=1;
+    if(tableau[6] == 0) {
+        if (myAbsorp.acr > 0) {
+            tableau[7] = 0;
+        } else {
+            tableau[7] = 1;
         }
-
+        tableau[6] == 1;
+    }
+    if(tableau[12]==0){
         && tableau[7]<=0) || (myAbsorp.acr<0 && tableau[7]>=0)){
             tableau[6]=1;
         }
