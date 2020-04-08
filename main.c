@@ -6,6 +6,7 @@
 #include "integration.h"
 
 int main() {
+    printf("clementine beug");
     /*absorp valeur =iirTest("record1_fir.dat");
     printf("%f,%f,%f,%f\n", valeur.acr,valeur.dcr,valeur.acir,valeur.dcir);
     absorp valeur2 =firTest("record1.dat");
