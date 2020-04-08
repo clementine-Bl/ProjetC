@@ -13,7 +13,7 @@ void affichage(oxy myOxy){
             printf("erreur ouverture fichier");  // on affiche une erreur si le fichier n'est pas trouvé
             exit(EXIT_FAILURE);
         }else{
-            FILE* verrou=fopen(".verrouData","w");
+            FILE* verrou=fopen(".verrouData","r");
             fprintf(fichier,"%d\n%d",myOxy.spo2,myOxy.pouls);
             remove(".verrouData");
             fclose(fichier);
