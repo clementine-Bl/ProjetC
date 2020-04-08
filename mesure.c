@@ -84,7 +84,7 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
                     if (tableau[5] != 1) { // On fait tant qu'une demi periode n'est pas faite
 
                         if ((tableau[6] == 1 && myAbsorp.acr <= tableau[7]) ||
-                            (tableau[6] == 0 && myAbsorp.acr >= tableau[7])) {
+                            (tableau[6] == 0 && myAbsorp.acr > tableau[7])) {
                             /* Si le debut commençait de façon croissante et que notre nouvelle valeur est plus petite que notre valeur de départ alors
                              une demi periode est passé*/
                             /* Ou bien si le debut commençait de façon décroissante et que notre nouvelle valeur est plus grande que notre valeur de départ alors
@@ -95,7 +95,7 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
                                     &tableau[3]);
                     } else {
                         if ((tableau[6] == 1 && myAbsorp.acr >= tableau[7]) ||
-                            (tableau[6] == 0 && myAbsorp.acr <= tableau[7])) {
+                            (tableau[6] == 0 && myAbsorp.acr < tableau[7])) {
                             mise_a_jour(&tableau[4], myAbsorp.acr, &tableau[0], &tableau[1], myAbsorp.acir, &tableau[2],
                                         &tableau[3]);
                             /*on sait que une demi periode est déjà passée
