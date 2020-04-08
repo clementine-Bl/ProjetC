@@ -104,15 +104,14 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
                             myOxy.spo2 = (-35.7) * ratio + 121.38;  //équations trouvé à l'aide du graphique
 
                         }
-                        if(tableau[8]==0){
-                            for (i=8;i<18;i++){
-                                tableau[i]=tableau[4];
+                        int compteur_periode = 1;
+                        for (i=8;i<18;i++){
+                            if (tableau[i] != 0){
+                                tableau[18] += tableau[i];
+                                compteur_periode +=1;
                             }
                         }
-                        for (i=8;i<18;i++){
-                            tableau[18] += tableau[i];
-                        }
-                        myOxy.pouls = 30000 / (tableau[18]/10);   //formule pour calculer la frequence en BPM à partir du nombre de valeur prise pendant une periode
+                        myOxy.pouls = 30000 / ((tableau[18] + tableau[4])/compteur_periode);   //formule pour calculer la frequence en BPM à partir du nombre de valeur prise pendant une periode
                         for (i=17;i>8;i--){
                             tableau[i] = tableau[i-1];
                         }
