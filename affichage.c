@@ -13,10 +13,10 @@ void affichage(oxy myOxy){
             printf("erreur ouverture fichier");  // on affiche une erreur si le fichier n'est pas trouvé
             exit(EXIT_FAILURE);
         }else{
-            FILE* verrou=fopen(".verrouData","r");
-            fprintf(fichier,"%d\n%d",myOxy.spo2,myOxy.pouls);
-            remove(".verrouData");
-            fclose(fichier);
+            FILE* verrou=fopen(".verrouData","r");  //on crée le fichier .verrouData pour que l'interface n'ouvre pas le fichier en meme temps
+            fprintf(fichier,"%d\n%d",myOxy.spo2,myOxy.pouls);  //on écrit la valeur de spo2 et de poul dans le fichier Data.txt
+            fclose(fichier);  //on ferme le fichier apres avoir ecrit dedans
+            remove(".verrouData");  //on supprime le fichier .verrouData quand on a fini d'utiliser le fichier Data.txt
         }
     }
 }
