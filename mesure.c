@@ -37,7 +37,7 @@ float* create_tableau_mesure(){
      tableau[18] = somme*/
     float* tableau;
     int i;
-    tableau =malloc(18* sizeof(float));  //on alloue 10 espace memoire
+    tableau =malloc(19* sizeof(float));  //on alloue 10 espace memoire
     if (tableau != NULL) {
         for (i=0;i<19;i++){
             tableau[i]=0;  //on initialise chaque element à 0
