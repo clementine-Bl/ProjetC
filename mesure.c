@@ -31,12 +31,15 @@ float* create_tableau_mesure(){
      Tableau[6] = 1 croissant ou 0 decroissant sens du premier point de lecture
      Tableau[7] = valeur de début de periode
      Tableau[8] = valeur du compteur valeur pendant une periode n-1
-     Tableau[9] = valeur du compteur valeur pendant une periode n-2*/
+     Tableau[9] = valeur du compteur valeur pendant une periode n-2
+     ...
+     Tableau[17] = valeur du compteur valeur pendant une periode n-10
+     tableau[18] = somme*/
     float* tableau;
     int i;
-    tableau =malloc(11* sizeof(float));  //on alloue 10 espace memoire
+    tableau =malloc(18* sizeof(float));  //on alloue 10 espace memoire
     if (tableau != NULL) {
-        for (i=0;i<11;i++){
+        for (i=0;i<19;i++){
             tableau[i]=0;  //on initialise chaque element à 0
         }
     }else{
@@ -47,6 +50,7 @@ float* create_tableau_mesure(){
 
 oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
     float ratio;
+    int i;
     if(tableau[4]==0){
         tableau[7] = myAbsorp.acr;  //la première valeur va servir de valeur de debut de période
         tableau[0] = tableau[7]; // initialisation du min ac_r
@@ -101,14 +105,18 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
 
                         }
                         if(tableau[8]==0){
-                            tableau[9]=tableau[4];
-                            tableau[8]= tableau[4];
-                            tableau[10]= tableau[4];
+                            for (i=8;i<18;i++){
+                                tableau[i]=tableau[4];
+                            }
                         }
-                        myOxy.pouls = 30000 / ((tableau[4]+tableau[8]+tableau[9]+tableau[10])/4);   //formule pour calculer la frequence en BPM à partir du nombre de valeur prise pendant une periode
-                        tableau[10]=tableau[9];
-                        tableau[9] = tableau[8];
-                        tableau[8] = tableau[4];
+                        for (i=8;i<18;i++){
+                            tableau[18] += tableau[i];
+                        }
+                        myOxy.pouls = 30000 / (tableau[18]/10);   //formule pour calculer la frequence en BPM à partir du nombre de valeur prise pendant une periode
+                        for (i=8;i<17;i++){
+                            tableau[i+1] += tableau[i];
+                        }
+                        tableau[8]=tableau[4];
                         tableau[4] = 0; // on remet le compteur de valeur à 0 car on a fini une periode
 
                     }else {
