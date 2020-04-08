@@ -62,9 +62,9 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
             tableau[12]=1;
         }
 
-        && tableau[7]<=0) || (myAbsorp.acr<0 && tableau[7]>=0)){
-            tableau[6]=1;
-
+        if((tableau[7] ==1 && myAbsorp.acr<=0)||(tableau[7] == 1 && myAbsorp.acr >= 0)) {
+            tableau[6] = 1;
+        }
     }else{
             if(tableau[4]==0){
                     tableau[7] = myAbsorp.acr;  //la première valeur va servir de valeur de debut de période
