@@ -149,6 +149,7 @@ void mise_a_jour(float value1,float value2, float* tableau){
     min_max(value2, &tableau[2], &tableau[3]);
     tableau[4] = tableau[4] + 1; // on incremente le compteur de valeur durant une periode
 }
+
 void supprime_tableau_mesure(float* tableau){
     free(tableau);
 }
