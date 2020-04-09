@@ -21,11 +21,10 @@ absorp lecture(FILE* file_pf, int* file_state){
                 i = 1;
                 valeur = 0;
             }
-            octet = fgetc(file_pf);
-        }
-    }
-	return myAbsorp;
 
+        }
+    }octet = fgetc(file_pf);
+	return myAbsorp;
 }
 
 float additoner (float nombre, int compteur, int chiffre){
