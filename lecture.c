@@ -9,19 +9,23 @@ absorp lecture(FILE* file_pf, int* file_state){
     while(cpt<5) {
         octet = fgetc(file_pf);
         octet = octet - 48;
-        additoner(valeur,i,octet);
+        printf("%d\n",octet);
+        valeur=additoner(valeur,i,octet);
+        printf("%f\n",valeur);
         i++;
         if (i==5){
             octet = fgetc(file_pf);
             modifier(myAbsorp,cpt,valeur);
             cpt ++;
             i=1;
+            //printf("%f,%f,%f,%f\n", myAbsorp.acr,myAbsorp.dcr,myAbsorp.acir,myAbsorp.dcir);
         }
     }
     octet = fgetc(file_pf);
     if(feof(file_pf) == EOF) {
         *file_state = EOF;
     }
+    //printf("%f,%f,%f,%f\n", myAbsorp.acr,myAbsorp.dcr,myAbsorp.acir,myAbsorp.dcir);
 	return myAbsorp;
 
 }
