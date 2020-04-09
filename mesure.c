@@ -54,11 +54,7 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
     int compteur_valeur = 1;   //variable qui nous permet de faire la moyenne pour le poul
     if(tableau[6] == 0) {
         if(tableau[12]==0) {  // avec la premiere valeur on va regarder si on commence positif ou negatif pour initialiser tableau[7]
-            if (myAbsorp.acr > 0) {
-                tableau[7] = 0;
-            }else{
-                tableau[7] = 1;
-            }
+            changement_de_signe(&tableau[7]); //on passe notre valeur de 0 à 1 ou de 1 à 0
             tableau[12]=1;
         }else{
             // on fait rien tant que on est pas passé par 0
@@ -71,11 +67,7 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
     }else{
         if(tableau[4]==0){  // on est au debut d'une periode
             // on inverse tableau[7] car on se retrouve avec des valeurs de signes opposé
-            if (tableau[7]==1) {
-                tableau[7] = 0;
-            }else {
-                tableau[7] = 1;
-            }
+            changement_de_signe(&tableau[7]);
             tableau[0] = myAbsorp.acr; // initialisation du min ac_r
             tableau[1]= myAbsorp.acr; // initialisation du max ac_r
             tableau[2]= myAbsorp.acir; // initialisation du min ac_ir
@@ -90,11 +82,7 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
                     // Ou bien si on avait des valeurs negative et que notre nouvelle valeur est positive alors on a fait une demie periode
                     tableau[5] = 1;
                     // on inverse tableau[7] car on se retrouve avec des valeurs de signes opposé
-                    if (tableau[7]==1) {
-                        tableau[7] = 0;
-                    }else {
-                        tableau[7] = 1;
-                    }
+                    changement_de_signe(&tableau[7]);
                 }
                 //on met à jour les variables min et max de acr et acir, et on incremente le compteur
                 mise_a_jour(&tableau[4], myAbsorp.acr, &tableau[0], &tableau[1], myAbsorp.acir, &tableau[2],&tableau[3]);
@@ -142,6 +130,13 @@ void min_max(float value,float* min, float* max){
         if (value > *max) { // mise à jour de max que si value n'est pas déjà un min
             *max = value;
         }
+    }
+}
+void changement_de_signe(float* tableau7){
+    if (*tableau7==1) {
+        *tableau7 = 0;
+    }else {
+        *tableau7 = 1;
     }
 }
 
