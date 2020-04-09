@@ -9,9 +9,7 @@ absorp lecture(FILE* file_pf, int* file_state){
     while(cpt<5) {
         octet = fgetc(file_pf);
         octet = octet - 48;
-        //printf("%d\n",octet);
         valeur=additoner(valeur,i,octet);
-        //printf("%f\n",valeur);
         i++;
         if (i==5){
             octet = fgetc(file_pf);
@@ -19,14 +17,12 @@ absorp lecture(FILE* file_pf, int* file_state){
             cpt ++;
             i=1;
             valeur=0;
-            //printf("%f,%f,%f,%f\n", myAbsorp.acr,myAbsorp.dcr,myAbsorp.acir,myAbsorp.dcir);
         }
     }
     octet = fgetc(file_pf);
     if(feof(file_pf) == EOF) {
         *file_state = EOF;
     }
-    //printf("%f,%f,%f,%f\n", myAbsorp.acr,myAbsorp.dcr,myAbsorp.acir,myAbsorp.dcir);
 	return myAbsorp;
 
 }
@@ -49,17 +45,17 @@ float additoner (float nombre, int compteur, int chiffre){
 
 absorp modifier  (absorp my, int compteur, float valeur){
     if(compteur%4==1){
-        my.acr=valeur-2047;
+        my.acr=valeur-2048;
     }
     if(compteur%4==2){
         my.dcr=valeur;
     }
     if(compteur%4==3){
-        my.acir=valeur-2047;
+        my.acir=valeur-2048;
     }
     if(compteur%4==0){
         my.dcir=valeur;
+
     }
-    printf("%f,%f,%f,%f\n", my.acr,my.dcr,my.acir,my.dcir);
     return my;
 }
