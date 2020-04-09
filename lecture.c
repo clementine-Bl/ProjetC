@@ -6,8 +6,12 @@ absorp lecture(FILE* file_pf, int* file_state){
     float valeur=0;
     int i=1, cpt=1;
     absorp myAbsorp;
-    while(cpt<5) {
+    octet = fgetc(file_pf);
+    while(cpt<5 && *file_state!=EOF) {
         octet = fgetc(file_pf);
+        if(octet == EOF) {
+            *file_state = EOF;
+        }
         octet = octet - 48;
         valeur=additoner(valeur,i,octet);
         i++;
@@ -20,9 +24,6 @@ absorp lecture(FILE* file_pf, int* file_state){
         }
     }
     octet = fgetc(file_pf);
-    if(octet == EOF) {
-        *file_state = EOF;
-    }
 	return myAbsorp;
 
 }
