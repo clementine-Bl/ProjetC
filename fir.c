@@ -2,20 +2,19 @@
 #include "fichiers.h"
 
 absorp firTest(char* filename){
-    float** parametre_FIR=create_tableau_FIR(); // creation de notre tableau pour FIR
+    float** parametre_FIR=create_tableau_FIR(); // creation de notre tableau de variables pour FIR
     int cpt=0; // initialisation de notre nombres de valeurs total à 0
-	absorp	myAbsorp;
-	absorp newAbsorp; // creation d'un newAbsorp pour eviter de renvoyer que des 0 quand notre etat passe à EOF
-	FILE* record1 = initFichier(filename);
+	absorp	myAbsorp, new;  // creation d'un newAbsorp pour eviter de renvoyer que des 0 quand notre etat passe à EOF
+	FILE* fichier = initFichier(filename);
 	int etat =0;
-	newAbsorp = lireFichier(record1,&etat);
+	myAbsorp = lireFichier(fichier,&etat);
 	while(etat != EOF){ // continue tant qu'on est pas rendu à la fin de notre fichier
-        myAbsorp = FIR(newAbsorp,&cpt,parametre_FIR);
-        newAbsorp = lireFichier(record1,&etat);
+        new = FIR(myAbsorp,&cpt,parametre_FIR);
+        myAbsorp = lireFichier(fichier,&etat);
 	}
-	finFichier(record1);
-	supprime_tableau_FIR(parametre_FIR); // libère l'espace pris par notre tableau
-	return myAbsorp;
+	finFichier(fichier);
+	supprime_tableau_FIR(parametre_FIR); // libère l'espace memoir pris par notre tableau
+	return new;
 }
 
 float** create_tableau_FIR(){

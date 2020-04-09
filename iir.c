@@ -2,17 +2,17 @@
 #include "fichiers.h"
 
 absorp iirTest(char* filename){
-    absorp myAbsorp, new ;
+    absorp myAbsorp, new ;  // creation d'un newAbsorp pour eviter de renvoyer que des 0 quand notre etat passe à EOF
     int etat=0;
     FILE* fichier=initFichier(filename);
     myAbsorp=lireFichier(fichier,&etat);
-    float** parametre_IIR=create_tableau_IIR();
-    do{
+    float** parametre_IIR=create_tableau_IIR();  // creation de notre tableau de variables pour IIR
+    do{  //tant qu'on est pas arrivé a la fin du fichier on lit les valeur et on les traite
         new=IIR(myAbsorp, parametre_IIR);
         myAbsorp=lireFichier(fichier,&etat);
     }while(etat != EOF);
     finFichier(fichier);
-    supprime_tableau_IIR(parametre_IIR);
+    supprime_tableau_IIR(parametre_IIR); // libère l'espace memoir pris par notre tableau
     return new;
 }
 
