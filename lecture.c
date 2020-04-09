@@ -16,7 +16,8 @@ absorp lecture(FILE* file_pf, int* file_state){
             cpt ++;
         }
     }
-    if(feof(file_pf)) {
+
+    if(feof(file_pf) == EOF) {
         *file_state = EOF;
     }
 	return myAbsorp; // return EOF flag
