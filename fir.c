@@ -2,23 +2,27 @@
 #include "fichiers.h"
 
 absorp firTest(char* filename){
-    float** parametre_FIR=create_tableau_FIR();
-    int cpt=0;
+    float** parametre_FIR=create_tableau_FIR(); // creation de notre tableau pour FIR
+    int cpt=0; // initialisation de notre nombres de valeurs total à 0
 	absorp	myAbsorp;
-	absorp newAbsorp;
+	absorp newAbsorp; // creation d'un newAbsorp pour eviter de renvoyer que des 0 quand notre etat passe à EOF
 	FILE* record1 = initFichier(filename);
 	int etat =0;
 	newAbsorp = lireFichier(record1,&etat);
-	while(etat != EOF){
+	while(etat != EOF){ // continue tant qu'on est pas rendu à la fin de notre fichier
         myAbsorp = FIR(newAbsorp,&cpt,parametre_FIR);
         newAbsorp = lireFichier(record1,&etat);
 	}
 	finFichier(record1);
-	supprime_tableau_FIR(parametre_FIR);
+	supprime_tableau_FIR(parametre_FIR); // libère l'espace pris par notre tableau
 	return myAbsorp;
 }
 
-float** create_tableau_FIR(){    //tableau a 2 lignes : premiere ligne contient les ACR  et  la deuxieme contient les ACIR
+float** create_tableau_FIR(){
+    /*Detail Tableau :
+      Tableau[0] : ligne qui représente les ancienne valeur de ac_r (50)
+      Tableau[1] : ligne qui représente les ancienne valeur de ac_ir (50)
+      Fin détail tableau */
     float** tableau;
     tableau = malloc(2*sizeof(float*));
     if(tableau == NULL ){
@@ -31,28 +35,30 @@ float** create_tableau_FIR(){    //tableau a 2 lignes : premiere ligne contient 
 }
 
 absorp FIR(absorp valueAbsorp,int *cpt, float** tableau){
-    absorp newAbsorp;
-    float sommeAC_R = FIR_TAPS[0]*valueAbsorp.acr;
-    float sommeAC_IR = FIR_TAPS[0]*valueAbsorp.acir;
-    int hcpt;
+    //cpt représente le nombre totale de variable ac_r ou ac_ir que nous avons
+    float sommeAC_R = FIR_TAPS[0]*valueAbsorp.acr; // x_ac_r[n] * h(0)  : début de notre somme
+    float sommeAC_IR = FIR_TAPS[0]*valueAbsorp.acir; // x_ac_ir[n] * h(0)
+    int hcpt; //valeur qui indique le nombres de valeurs présentent dans notre tableau
     int i;
-    if (*cpt>50) {
+    if (*cpt>50) { // mise à jour de hcpt : si cpt > 50 notre tableau sera forcement rempli donc hcpt=50
         hcpt = 50;
     }else {
         hcpt = *cpt;
     }
     for (i=0;i<hcpt;i++){
-        sommeAC_R += FIR_TAPS[i+1] * (tableau[0][(*cpt-i) % 50]);
+        sommeAC_R += FIR_TAPS[i+1] * (tableau[0][(*cpt-i) % 50]); // calcul de la somme  h(i+1)*x[n-i]
         sommeAC_IR += FIR_TAPS[i+1] * (tableau[1][(*cpt-i) % 50]);
     }
-    *cpt = *cpt + 1;
-    tableau[0][*cpt % 50] = valueAbsorp.acr;
-    tableau[1][*cpt % 50] = valueAbsorp.acir;
-    newAbsorp.acr= sommeAC_R;
-    newAbsorp.acir =sommeAC_IR;
-    newAbsorp.dcir =valueAbsorp.dcir;
-    newAbsorp.dcr = valueAbsorp.dcr;
-    return newAbsorp;
+    /*le modulo sert à savoir ou se trouve nos valeur exemple : de x(0) à x(49) ils seront rentrés dans l'ordre dans le tableau
+     mais pour x(50) nous allons le rentrer à la place de x(0) et x(51) à la place de x(1)
+     si nous somme à n=51 alors notre somme est x(51)*h(1) + x(50)*h(2) ... (51%50)=1 donc tableau[0][1] * h(1)*/
+
+    *cpt = *cpt + 1; // on incrémente notre nombres de variable total
+    tableau[0][*cpt % 50] = valueAbsorp.acr; // mise à jour du tableau ac-r avec la nouvelle valeur myAbsorp.acr
+    tableau[1][*cpt % 50] = valueAbsorp.acir; // mise à jour du tableau ac-ir avec la nouvelle valeur myAbsorp.acir
+    valueAbsorp.acr= sommeAC_R; // mise à jour de notre valeur ac_r filtré
+    valueAbsorp.acir =sommeAC_IR; // mise à jour de notre valeur ac_ir filtré
+    return valueAbsorp;
 }
 
 float FIR_TAPS[51]={
