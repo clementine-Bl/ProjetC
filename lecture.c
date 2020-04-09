@@ -3,8 +3,12 @@
 
 absorp lecture(FILE* file_pf, int* file_state){
     int octet;
-    int i =0;
+    int i=0;
     while(i<21) {
+        if (i<4){
+            octet = fgetc(file_pf);
+            octet = octet - 48;
+        }
         octet = fgetc(file_pf);
         printf("%d\n", octet);
         i++;
