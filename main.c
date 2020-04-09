@@ -8,10 +8,16 @@
 #include "fichiers.h"
 
 int main() {
-    int file_state;
+    int file_state =0;
+    int i=0;
     absorp myAbsorp;
     FILE* file_pf=initFichier("record1_bin.dat");
-    myAbsorp=lecture(file_pf,&file_state);
+    while(file_state!=EOF) {
+        myAbsorp = lecture(file_pf, &file_state);
+        i++;
+        printf("%f et %f et %f et %f\n", myAbsorp.acr, myAbsorp.dcr, myAbsorp.acir, myAbsorp.dcir);
+    }
+
     /*absorp valeur =iirTest("record1_fir.dat");
     printf("%f,%f,%f,%f\n", valeur.acr,valeur.dcr,valeur.acir,valeur.dcir);
     absorp valeur2 =firTest("record1.dat");

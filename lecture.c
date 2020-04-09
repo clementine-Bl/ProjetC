@@ -20,7 +20,7 @@ absorp lecture(FILE* file_pf, int* file_state){
         }
     }
     octet = fgetc(file_pf);
-    if(feof(file_pf) == EOF) {
+    if(octet == EOF) {
         *file_state = EOF;
     }
 	return myAbsorp;
