@@ -18,6 +18,7 @@ absorp lecture(FILE* file_pf, int* file_state){
             modifier(myAbsorp,cpt,valeur);
             cpt ++;
             i=1;
+            valeur=0;
             //printf("%f,%f,%f,%f\n", myAbsorp.acr,myAbsorp.dcr,myAbsorp.acir,myAbsorp.dcir);
         }
     }
