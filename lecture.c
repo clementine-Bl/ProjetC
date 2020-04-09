@@ -16,9 +16,6 @@ absorp lecture(FILE* file_pf, int* file_state) {
         i++;
         if (i == 5) {
             octet = fgetc(file_pf);
-            if(octet==EOF){
-                *file_state =EOF;
-            }
             myAbsorp = modifier(myAbsorp, cpt, valeur);
             cpt++;
             i = 1;
