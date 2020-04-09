@@ -4,14 +4,13 @@
 absorp lecture(FILE* file_pf, int* file_state) {
     int octet, newoctet;
     float valeur = 0;
+    long curseur = -1;
     int i = 1, cpt = 1;
     absorp myAbsorp;
-    octet = fgetc(file_pf);
-    if(octet == EOF){
-        *file_state = EOF;
-    }
-    while (cpt < 5 && *file_state != EOF) {
 
+
+    while (cpt < 5 && *file_state != EOF) {
+        octet = fgetc(file_pf);
         octet = octet - 48;
         valeur = additoner(valeur, i, octet);
         i++;
@@ -25,11 +24,14 @@ absorp lecture(FILE* file_pf, int* file_state) {
             i = 1;
             valeur = 0;
         }
-        octet=fgetc(file_pf);
-    }
-    if(octet==EOF){
+    }octet = fgetc(file_pf);
+    octet=fgetc(file_pf);
+    if(octet ==EOF){
         *file_state =EOF;
+    }else {
+        fseek(file_pf, curseur, SEEK_CUR);
     }
+
 
 	return myAbsorp;
 }
