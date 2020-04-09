@@ -89,7 +89,7 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
                     changement_de_signe(&tableau[7]);
                 }
                 //on met à jour les variables min et max de acr et acir, et on incremente le compteur
-                mise_a_jour(&tableau[4], myAbsorp.acr, &tableau[0], &tableau[1], myAbsorp.acir, &tableau[2],&tableau[3]);
+                mise_a_jour(myAbsorp.acr, myAbsorp.acir, tableau);
             } else {
                 if ((tableau[7] ==0 && myAbsorp.acr<=0)||(tableau[7] == 1 && myAbsorp.acr >= 0)) {
                     // Si on avait des valeurs positive et que notre nouvelle valeur est negative alors on a fait une autre demie periode donc une periode en tout
@@ -118,7 +118,7 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
                     tableau[4] = 0; // on remet le compteur de valeur à 0 car on a fini une periode
                 } else {
                     // si on a pas fini l'autre demie periode, on met à jour les variables min et max de acr et acir, et on incremente le compteur
-                    mise_a_jour(&tableau[4], myAbsorp.acr, &tableau[0], &tableau[1], myAbsorp.acir, &tableau[2],&tableau[3]);
+                    mise_a_jour(myAbsorp.acr, myAbsorp.acir, tableau);
                 }
             }
         }
@@ -127,7 +127,7 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
 }
 
 
-void min_max(float value,float* min, float* max){
+void min_max(float value,float *min, float *max){
     if(value < *min){ // mise à jour de min
         *min = value;
     }else {
@@ -144,10 +144,10 @@ void changement_de_signe(float* tableau7){
     }
 }
 
-void mise_a_jour(float* tableau4 ,float value1, float* tableau0 , float* tableau1,float value2, float* tableau2,float* tableau3){
-    min_max(value1, tableau0, tableau1);
-    min_max(value2, tableau2,tableau3);
-    *tableau4 = *tableau4 + 1; // on incremente le compteur de valeur durant une periode
+void mise_a_jour(float value1,float value2, float* tableau){
+    min_max(value1, &tableau[0], &tableau[1]);
+    min_max(value2, &tableau[2], &tableau[3]);
+    tableau[4] = tableau[4] + 1; // on incremente le compteur de valeur durant une periode
 }
 void supprime_tableau_mesure(float* tableau){
     free(tableau);
