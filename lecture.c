@@ -1,29 +1,31 @@
 #include "lecture.h"
 #include "fichiers.h"
 
-absorp lecture(FILE* file_pf, int* file_state){
-    int octet;
-    float valeur=0;
-    int i=1, cpt=1;
+absorp lecture(FILE* file_pf, int* file_state) {
+    int octet, newoctet;
+    float valeur = 0;
+    int i = 1, cpt = 1;
     absorp myAbsorp;
-    while(cpt<5 && *file_state!=EOF) {
+    while (cpt < 5 && *file_state != EOF) {
         octet = fgetc(file_pf);
-        if(octet == EOF) {
-            *file_state = EOF;
-        }else {
-            octet = octet - 48;
-            valeur = additoner(valeur, i, octet);
-            i++;
-            if (i == 5) {
-                octet = fgetc(file_pf);
-                myAbsorp = modifier(myAbsorp, cpt, valeur);
-                cpt++;
-                i = 1;
-                valeur = 0;
-            }
-
+        octet = octet - 48;
+        valeur = additoner(valeur, i, octet);
+        i++;
+        if (i == 5) {
+            octet = fgetc(file_pf);
+            myAbsorp = modifier(myAbsorp, cpt, valeur);
+            cpt++;
+            i = 1;
+            valeur = 0;
         }
-    }octet = fgetc(file_pf);
+    }
+    octet = fgetc(file_pf);
+    newoctet = fgetc(file_pf);
+    if (newoctet == EOF) {
+        *file_state = EOF;
+    }else{
+        *file_state=octet;
+    }
 	return myAbsorp;
 }
 
