@@ -19,7 +19,7 @@ int main() {
         i++;
     }
     finFichier(file_pf);
-    printf("%f et %f et %f et %f\n", myAbsorp.acr, myAbsorp.dcr, myAbsorp.acir, myAbsorp.dcir);
+    printf("%f,%f,%f,%f\n", myAbsorp.acr, myAbsorp.dcr, myAbsorp.acir, myAbsorp.dcir);
 
     //permet de tester FIR
     absorp valeur2 =firTest("record1.dat");
