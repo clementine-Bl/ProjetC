@@ -4,7 +4,7 @@
 void affichage(oxy myOxy){
     if (access(".verrouData",F_OK)!=-1){
         // on regarde si le fichier .verrouData existe,
-        // s'il existe c'est que l'interface lis les données donc on ne peut pas effecteur deux choses sur un meme fichier en meme temps
+        // s'il existe c'est que l'interface lis les données donc on ne peut pas effecteur deux choses en meme temps sur un meme fichier
         printf("Attention l'interface lit les données\n");
     }else{
         // comme il n'existe pas on peut modifier le fichier Data.txt

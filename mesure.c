@@ -22,6 +22,7 @@ oxy mesureTest(char* filename){
 
 float* create_tableau_mesure(){
     /* On crée un tableau pour stocker les variables dont on a besoin à chaque appelle de mesure
+     Detail Tableau :
      Tableau[0] = min_ac_r
      Tableau[1] = max_ac_r
      Tableau[2] = min_ac_ir
@@ -29,7 +30,7 @@ float* create_tableau_mesure(){
      Tableau[4] = compteur valeur pendant une periode
      Tableau[5] = 1 ou 0 si la demi-periode est faite
      Tableau[6] = 0 si on est dans l'attente de la premiere periode et 1 sinon
-     Tableau[7] = 0 si on est sur des valeurs positives et  1 si on est sur des valeurs négatives
+     Tableau[7] = 0 si on est actuellement sur des valeurs positives et  1 si on est sur des valeurs négatives
      Tableau[8] = valeur du poul pendant la periode n-1
      Tableau[9] = valeur du poul pendant la periode n-2
      Tableau[10] = valeur du poul pendant la periode n-3
@@ -49,11 +50,14 @@ float* create_tableau_mesure(){
 }
 
 oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
-    float ratio;
+    float ratio;  //le ratio sert à calculer le spo2
     int i;
-    int compteur_valeur = 1;   //variable qui nous permet de faire la moyenne pour le poul
+    int compteur_valeur_poul = 1;   //variable qui nous permet de faire la moyenne pour le poul
     if(tableau[6] == 0) {
-        if(tableau[12]==0) {  // avec la premiere valeur on va regarder si on commence positif ou negatif pour initialiser tableau[7]
+        //on rentre dans ce if tant qu'on a pas commencé la premiere periode
+        //on ne prend pas en compte les premiere valeur car on n'aura pas une periode entiere
+        if(tableau[12]==0) {
+            // avec la premiere valeur on va regarder si on commence par des valeurs positives ou negatives pour initialiser tableau[7]
             if (myAbsorp.acr > 0) {
                 tableau[7] = 0;
             }else{
@@ -69,7 +73,7 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
             }
         }
     }else{
-        if(tableau[4]==0){  // on est au debut d'une periode
+        if(tableau[4]==0){  // on est au debut d'une periode, on initialise tout
             // on inverse tableau[7] car on se retrouve avec des valeurs de signes opposé
             changement_de_signe(&tableau[7]);//on passe notre valeur de 0 à 1 ou de 1 à 0
             tableau[0] = myAbsorp.acr; // initialisation du min ac_r
@@ -90,10 +94,11 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
                 }
                 //on met à jour les variables min et max de acr et acir, et on incremente le compteur
                 mise_a_jour(myAbsorp.acr, myAbsorp.acir, tableau);
-            } else {
+            } else {  // On rentre dans le else si une demi periode est deja faite
                 if ((tableau[7] ==0 && myAbsorp.acr<=0)||(tableau[7] == 1 && myAbsorp.acr >= 0)) {
-                    // Si on avait des valeurs positive et que notre nouvelle valeur est negative alors on a fait une autre demie periode donc une periode en tout
-                    // Ou bien si on avait des valeurs negative et que notre nouvelle valeur est positive alors on a fait une autre demie periode donc une periode en tout
+                    // Si on avait des valeurs positive et que notre nouvelle valeur est negative alors on a fait une
+                    // autre demie periode donc une periode en tout. Ou bien si on avait des valeurs negative et que notre
+                    // nouvelle valeur est positive alors on a fait une autre demie periode donc une periode en tout.
                     ratio = ((tableau[1] - tableau[0]) / myAbsorp.dcr) / ((tableau[3] - tableau[2]) / myAbsorp.dcir);
                     /* Calcul du ratio : Tableau[1]-Tableau[0] : max-min amplitude crête à crête de ac_r
                                         Tableau[3]-Tableau[2] : max-min amplitude crête à crête de ac_ir*/
@@ -104,17 +109,17 @@ oxy MESURE(absorp myAbsorp, float* tableau,oxy myOxy){
                     }
                     // on somme les anciennes valeurs de poul
                     for (i = 8; i < 11; i++) {
-                        if (tableau[i] != 0) {
+                        if (tableau[i] != 0) {  //on ajoute pas les elements du tableau s'ils sont egal à 0
                             tableau[11] += tableau[i];
-                            compteur_valeur += 1;
+                            compteur_valeur_poul += 1;//on incremente si on a ajouté un element à la somme cela nous permet de savoir par combien divisé
                         }
                     }
-                    myOxy.pouls = ((30000 / tableau[4]) + tableau[11]) /compteur_valeur; // on ajoute la nouvelle valeur de poul à la sommes et on divise par le nombre de valeurs
+                    myOxy.pouls = ((30000 / tableau[4]) + tableau[11]) / compteur_valeur_poul; // on ajoute la nouvelle valeur de poul à la sommes et on divise par le nombre de valeurs
                     // on decale les valeurs de poul stocker
                     for (i = 10; i > 8; i--) {
                         tableau[i] = tableau[i - 1];
                     }
-                    tableau[8] = 30000 / tableau[4];
+                    tableau[8] = 30000 / tableau[4]; //on met la nouvelle valeur du poul dans le tableau
                     tableau[4] = 0; // on remet le compteur de valeur à 0 car on a fini une periode
                 } else {
                     // si on a pas fini l'autre demie periode, on met à jour les variables min et max de acr et acir, et on incremente le compteur
@@ -150,6 +155,6 @@ void mise_a_jour(float value1,float value2, float* tableau){
     tableau[4] = tableau[4] + 1; // on incremente le compteur de valeur durant une periode
 }
 
-void supprime_tableau_mesure(float* tableau){
+void supprime_tableau_mesure(float* tableau){   //fonction pour supprimer et donc libérer l'espace memoir pris par le tableau
     free(tableau);
 }

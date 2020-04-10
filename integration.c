@@ -1,14 +1,13 @@
+#include "integration.h"
 #include "affichage.h"
 #include "iir.h"
 #include "fir.h"
 #include "fichiers.h"
-#include "integration.h"
 #include "mesure.h"
-
 
 void integrationTest(char* filename){
     int etat = 0;
-    int cpt = 0;
+    int compteur_valeur = 0;
     // on crée les tableau contenant les variables utiles pour les fonction FIR, IIR et MESURE
     float ** tab_FIR=create_tableau_FIR();
     float ** tab_IIR=create_tableau_IIR();
@@ -20,9 +19,9 @@ void integrationTest(char* filename){
     valeur.spo2 =0;  //initialisation
     signal=lireFichier(fichier, &etat);
     while(etat != EOF){  // on analyse les données tant que le fichier n'est pas fini
-        signal=FIR(signal,&cpt,tab_FIR);  //on filtre les donnes avec FIR
-        signal=IIR(signal,tab_IIR);  //on filtre les donnes avec IIR
-        valeur=MESURE(signal,tab_mesure,valeur);  //on calcul le poul et spo2 avec les donnes filtré
+        signal=FIR(signal, &compteur_valeur, tab_FIR);  //on filtre les donnees avec FIR
+        signal=IIR(signal,tab_IIR);  //on filtre les donnees avec IIR
+        valeur=MESURE(signal,tab_mesure,valeur);  //on calcul le poul et spo2 avec les donnees filtrées
         affichage(valeur);  //on affiche les valeurs dans un fichier
         signal=lireFichier(fichier, &etat);  //on lit une nouvelle donnee
     }

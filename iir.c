@@ -23,8 +23,8 @@ absorp IIR (absorp my, float ** tableau){
     float y1ir = my.acir-tableau[1][0]+0.992*tableau[1][1]; // calcul de y[n] de ac_ir
     tableau[1][0]=my.acir; // remplace x[n-1] par x[n] de ac_ir
     my.acir=y1ir; // on modifie le acir de absorp par notre nouvelle valeur
-    tableau[0][1]=y1r;
-    tableau[1][1]=y1ir; // Sur les deux dernière ligne on remplace nos y[n-1] de ac_r et ac_ir
+    tableau[0][1]=y1r;  // Sur les deux dernière ligne on remplace nos y[n-1] de ac_r et ac_ir
+    tableau[1][1]=y1ir;
     return my;
 }
 
@@ -33,7 +33,6 @@ float** create_tableau_IIR(){
      Tableau[0] ligne de ac_r
         - Tableau[0][0] correspond a : x[n-1]
         - Tableau[0][1] correspond a : y[n-1]
-
      Tableau[1] ligne de ac_ir
         - Tableau[1][0] correspond a : x[n-1]
         - Tableau[1][1] correspond a : y[n-1]
@@ -56,7 +55,7 @@ float** create_tableau_IIR(){
     return tableau;
 }
 
-void supprime_tableau_IIR(float** tableau){
+void supprime_tableau_IIR(float** tableau){  //fonction pour supprimer et donc libérer l'espace memoir pris par le tableau
     free(tableau[0]);
     free(tableau[1]);
     free(tableau);
