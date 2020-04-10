@@ -10,28 +10,20 @@ absorp lecture(FILE* file_pf, int* file_state) {
     int valid=0; // variable qui passe à 1 quand notre trame est valide
     while(valid!=1){ // On continue tant que notre trame est invalide
         octet = fgetc(file_pf);  //permet de lire un caractere
-        if(octet ==EOF) { //verification de fin de fichier
-            *file_state = EOF;
-            valid=1; // quitte la boucle si nous somme à la fin du fichier
-        }
+        test_fin_fichier(&octet,&valid,file_state); // quitte la boucle si nous somme à la fin du fichier
+
         while (octet!=10 && valid!=1){ //Tant qu'on arrive pas à la fin de notre ligne, fin de ligne = LF = decimal(10)
             tab_octet[compteur]=octet; // On ajoute tout dans notre tableau jusqu'à la dernière valeur avant LF même les virgules
             compteur++;  //on incremente compteur car on a ajouté un octect à la trame
             octet = fgetc(file_pf);
-            if(octet ==EOF) {
-                *file_state = EOF;
-                valid=1;
-            }
+            test_fin_fichier(&octet,&valid,file_state);
         }
         if(compteur==19) { // On verfie que notre tableau est valide donc qu'il possède bien toute nos valeurs, il faut qu'il en ai 19
             valid = 1;
         }else{  //sinon on remet le compteur à 0 et on recommence le while en lisant une nouvelle trame
             compteur = 0;
             octet = fgetc(file_pf); // On retourne à la ligne avec CR
-            if(octet ==EOF) {
-                *file_state = EOF;
-                valid=1;
-            }
+            test_fin_fichier(&octet,&valid,file_state);
         }
     }
     // on va maintenant traité la trame valide récupérée
@@ -45,7 +37,7 @@ absorp lecture(FILE* file_pf, int* file_state) {
     if(octet ==EOF) {
         *file_state = EOF;
     }
-	return myAbsorp;
+    return myAbsorp;
 }
 
 
@@ -73,3 +65,9 @@ absorp modifier  (absorp my, int compteur, float valeur){
     return my;
 }
 
+void test_fin_fichier(int* octet,int* valid,int* file_state){
+    if(*octet ==EOF) {
+        *file_state = EOF;
+        *valid=1;
+    }
+}
