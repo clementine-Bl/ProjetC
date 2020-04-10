@@ -11,7 +11,6 @@ absorp lecture(FILE* file_pf, int* file_state) {
     while(valid!=1){ // On continue tant que notre trame est invalide
         octet = fgetc(file_pf);  //permet de lire un caractere
         test_fin_fichier(&octet,&valid,file_state); // quitte la boucle si nous somme à la fin du fichier
-
         while (octet!=10 && valid!=1){ //Tant qu'on arrive pas à la fin de notre ligne, fin de ligne = LF = decimal(10)
             tab_octet[compteur]=octet; // On ajoute tout dans notre tableau jusqu'à la dernière valeur avant LF même les virgules
             compteur++;  //on incremente compteur car on a ajouté un octect à la trame
@@ -34,9 +33,7 @@ absorp lecture(FILE* file_pf, int* file_state) {
         i = i + 5; // on avance de 5 : nous permet d'éviter la virgule
     }
     octet = fgetc(file_pf); // Après avoir calculé ac_r dc_r ac_ir et dc_ir, on lis le dernier octet CR et on regarde si on est pas à la fin du fichier
-    if(octet ==EOF) {
-        *file_state = EOF;
-    }
+    test_fin_fichier(&octet,&valid,file_state);
     return myAbsorp;
 }
 
